@@ -25,7 +25,7 @@ for r in app.routes:
     name = getattr(r, "name", "<unnamed>")
     logger.info("Route: %s %s -> %s", ",".join(sorted(methods)), path, name)
 
-logger.info("CapCut Mate API")
+logger.info("CutAuto API")
 
 # 5. 启动
 if __name__ == "__main__":
