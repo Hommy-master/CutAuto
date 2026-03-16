@@ -127,6 +127,15 @@ CutAuto/
 | TIP_URL | - | Help documentation URL |
 | DOWNLOAD_FILE_SIZE_LIMIT | 209715200 | File download size limit (bytes) |
 
+## Business Cooperation
+
+For business cooperation inquiries, please contact us:
+
+| Contact | Details |
+|---------|---------|
+| WeChat | ![WeChat QR Code](wechat.jpg) |
+| Email | [taohongmin@sina.cn](mailto:taohongmin@sina.cn) |
+
 ## License
 
 This project is open-sourced under the [MIT License](LICENSE).

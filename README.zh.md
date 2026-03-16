@@ -127,6 +127,15 @@ CutAuto/
 | TIP_URL | - | 帮助文档 URL |
 | DOWNLOAD_FILE_SIZE_LIMIT | 209715200 | 文件下载大小限制（字节）|
 
+## 商业合作
+
+如有商业合作需求，欢迎联系我们：
+
+| 联系方式 | 详情 |
+|----------|------|
+| 微信 | ![微信二维码](wechat.jpg) |
+| 邮箱 | [taohongmin@sina.cn](mailto:taohongmin@sina.cn) |
+
 ## 许可证
 
 本项目基于 [MIT License](LICENSE) 开源。
