@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.router import v1_router, template_router
+from src.router import v1_router
 from src.utils.logger import logger
 from src.middlewares import PrepareMiddleware, ResponseMiddleware
 
@@ -15,7 +15,6 @@ app: FastAPI = FastAPI(
 
 # 2. 注册路由
 app.include_router(router=v1_router, prefix="/openapi/cutauto/v1", tags=["cutauto"])
-app.include_router(router=template_router, prefix="/openapi/cutauto/v1/templates", tags=["模板管理"])
 
 # 3. 添加中间件
 app.add_middleware(middleware_class=PrepareMiddleware)

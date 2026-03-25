@@ -21,7 +21,7 @@ import src.pyJianYingDraft as draft
 from src.pyJianYingDraft import ScriptFile, TrackType
 from src.utils.logger import logger
 from src.utils.draft_cache import update_cache
-from src.utils.download import download_file
+from src.utils.download import download
 from src.schemas.template import (
     CreateDraftRequest688001,
     CreateDraftRequest688002,
@@ -144,7 +144,7 @@ class BaseProcessor(ABC):
         """
         try:
             # 使用现有的下载工具
-            local_path = download_file(url, config.TEMP_DIR)
+            local_path = download(url, config.TEMP_DIR)
             self.temp_files.append(local_path)
             logger.info(f"素材下载成功: {url} -> {local_path}")
             return local_path

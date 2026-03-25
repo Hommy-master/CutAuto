@@ -6,7 +6,7 @@
 """
 
 from typing import List, Optional, Literal
-from pydantic import BaseModel, Field, HttpUrl, validator
+from pydantic import BaseModel, Field, HttpUrl, field_validator
 
 
 # ==================== 基础素材模型 ====================
@@ -18,8 +18,8 @@ class VideoMaterial(BaseModel):
     start_time: Optional[float] = Field(0, ge=0, description="开始时间（秒），默认从0开始")
     duration: Optional[float] = Field(None, ge=0, description="持续时长（秒），不传则使用视频完整时长")
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "url": "https://example.com/video.mp4",
                 "material_name": "主视频",
@@ -27,6 +27,7 @@ class VideoMaterial(BaseModel):
                 "duration": 10.5
             }
         }
+    }
 
 
 class AudioMaterial(BaseModel):
@@ -37,8 +38,8 @@ class AudioMaterial(BaseModel):
     fade_in: Optional[float] = Field(None, ge=0, description="淡入时长（秒）")
     fade_out: Optional[float] = Field(None, ge=0, description="淡出时长（秒）")
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "url": "https://example.com/audio.mp3",
                 "material_name": "背景音乐",
@@ -47,6 +48,7 @@ class AudioMaterial(BaseModel):
                 "fade_out": 2.0
             }
         }
+    }
 
 
 class ImageMaterial(BaseModel):
@@ -55,28 +57,29 @@ class ImageMaterial(BaseModel):
     material_name: Optional[str] = Field(None, description="素材名称")
     duration: float = Field(..., gt=0, le=300, description="显示时长（秒），最大300秒")
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "url": "https://example.com/image.jpg",
                 "material_name": "封面图",
                 "duration": 5.0
             }
         }
+    }
 
 
 class TextMaterial(BaseModel):
     """文本素材信息"""
     content: str = Field(..., min_length=1, max_length=500, description="文本内容")
     font_size: int = Field(30, ge=12, le=200, description="字体大小，默认30")
-    color: str = Field("#FFFFFF", regex=r"^#[0-9A-Fa-f]{6}$", description="字体颜色，十六进制格式")
+    color: str = Field("#FFFFFF", pattern=r"^#[0-9A-Fa-f]{6}$", description="字体颜色，十六进制格式")
     position_x: float = Field(0.5, ge=0, le=1, description="水平位置（0-1之间，0.5为居中）")
     position_y: float = Field(0.5, ge=0, le=1, description="垂直位置（0-1之间，0.5为居中）")
     start_time: float = Field(0, ge=0, description="开始时间（秒）")
     duration: float = Field(..., gt=0, le=300, description="持续时长（秒）")
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "content": "欢迎使用剪映自动化",
                 "font_size": 40,
@@ -87,6 +90,7 @@ class TextMaterial(BaseModel):
                 "duration": 5.0
             }
         }
+    }
 
 
 # ==================== 模板 688001 参数 ====================
@@ -134,7 +138,7 @@ class CreateDraftRequest688001(BaseModel):
         description="输出视频总时长（秒），不传则自动计算"
     )
     
-    @validator('transition_type')
+    @field_validator('transition_type')
     def validate_transition_type(cls, v):
         """校验转场类型是否合法"""
         allowed_transitions = ['fade', 'slide', 'zoom', 'none']
@@ -142,8 +146,8 @@ class CreateDraftRequest688001(BaseModel):
             raise ValueError(f"转场类型必须是以下之一：{', '.join(allowed_transitions)}")
         return v
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "template_id": "688001",
                 "videos": [
@@ -171,6 +175,7 @@ class CreateDraftRequest688001(BaseModel):
                 "transition_type": "fade"
             }
         }
+    }
 
 
 # ==================== 模板 688002 参数 ====================
@@ -219,7 +224,7 @@ class CreateDraftRequest688002(BaseModel):
         description="每张图片显示时长（秒），默认5秒"
     )
     
-    @validator('animation_type')
+    @field_validator('animation_type')
     def validate_animation_type(cls, v):
         """校验动画类型是否合法"""
         allowed_animations = ['ken_burns', 'slide', 'fade', 'zoom', 'none']
@@ -227,8 +232,8 @@ class CreateDraftRequest688002(BaseModel):
             raise ValueError(f"动画类型必须是以下之一：{', '.join(allowed_animations)}")
         return v
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "template_id": "688002",
                 "images": [
@@ -262,6 +267,7 @@ class CreateDraftRequest688002(BaseModel):
                 "image_display_duration": 5
             }
         }
+    }
 
 
 # ==================== 模板 688003 参数 ====================
@@ -325,7 +331,7 @@ class CreateDraftRequest688003(BaseModel):
         description="导出质量：720p、1080p、2k、4k"
     )
     
-    @validator('video_effect')
+    @field_validator('video_effect')
     def validate_video_effect(cls, v):
         """校验视频特效类型"""
         if v is None:
@@ -335,7 +341,7 @@ class CreateDraftRequest688003(BaseModel):
             raise ValueError(f"特效类型必须是以下之一：{', '.join(allowed_effects)}")
         return v
     
-    @validator('export_quality')
+    @field_validator('export_quality')
     def validate_export_quality(cls, v):
         """校验导出质量"""
         allowed_qualities = ['720p', '1080p', '2k', '4k']
@@ -343,8 +349,8 @@ class CreateDraftRequest688003(BaseModel):
             raise ValueError(f"导出质量必须是以下之一：{', '.join(allowed_qualities)}")
         return v
     
-    class Config:
-        schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "template_id": "688003",
                 "video": {
@@ -374,6 +380,7 @@ class CreateDraftRequest688003(BaseModel):
                 "export_quality": "1080p"
             }
         }
+    }
 
 
 # ==================== 响应模型 ====================
