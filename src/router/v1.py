@@ -32,35 +32,6 @@ import config
 # 创建路由实例
 router = APIRouter(prefix="/v1", tags=["v1"])
 
-
-# ==================== 基础草稿接口 ====================
-
-@router.post(path="/create_draft", response_model=BasicCreateDraftResponse)
-def create_draft(cdr: CreateDraftRequest) -> BasicCreateDraftResponse:
-    """
-    创建剪映草稿 (v1版本)
-    """
-    # 调用service层处理业务逻辑
-    draft_url = service.create_draft(
-        tpl_name=cdr.tpl_name
-    )
-
-    return BasicCreateDraftResponse(draft_url=draft_url, tip_url=config.TIP_URL)
-
-
-@router.post(path="/mashup688001", response_model=BasicCreateDraftResponse)
-def mashup688001() -> BasicCreateDraftResponse:
-    """
-    使用688001模板创建剪映草稿
-    """
-    # 调用service层处理业务逻辑
-    draft_url = service.create_draft(tpl_name="688001")
-
-    return BasicCreateDraftResponse(draft_url=draft_url, tip_url=config.TIP_URL)
-
-
-# ==================== 模板查询接口 ====================
-
 @router.get(
     path="/templates",
     response_model=List[TemplateInfo],
