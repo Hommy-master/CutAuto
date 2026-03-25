@@ -48,6 +48,19 @@ class CustomError(Enum):
     AUDIO_DURATION_GET_FAILED = (2034, "获取音频时长失败", "Get audio duration failed")
     INSUFFICIENT_ACCOUNT_BALANCE = (2035, "账户余额不足，当前积分需大于 1 才可继续使用服务，请完成充值后重试", "Insufficient account balance. A minimum of 1 point is required to continue using the service. Please recharge and try again.")
     INVALID_APIKEY = (2036, "无效的apiKey", "Invalid apiKey")
+    
+    # ===== 模板相关错误码 (2050-2099) =====
+    TEMPLATE_NOT_FOUND = (2050, "模板不存在", "Template not found")
+    TEMPLATE_PROCESSOR_NOT_FOUND = (2051, "模板处理器未找到", "Template processor not found")
+    INVALID_TEMPLATE_PARAMS = (2052, "模板参数无效", "Invalid template parameters")
+    TEMPLATE_MATERIAL_DOWNLOAD_FAILED = (2053, "模板素材下载失败", "Template material download failed")
+    TEMPLATE_MATERIAL_INVALID = (2054, "模板素材无效", "Template material invalid")
+    TEMPLATE_UNSUPPORTED_TYPE = (2055, "不支持的模板类型", "Unsupported template type")
+    TEMPLATE_VIDEO_REPLACE_FAILED = (2056, "模板视频替换失败", "Template video replacement failed")
+    TEMPLATE_AUDIO_REPLACE_FAILED = (2057, "模板音频替换失败", "Template audio replacement failed")
+    TEMPLATE_TEXT_REPLACE_FAILED = (2058, "模板文字替换失败", "Template text replacement failed")
+    TEMPLATE_IMAGE_REPLACE_FAILED = (2059, "模板图片替换失败", "Template image replacement failed")
+    TEMPLATE_EFFECT_APPLY_FAILED = (2060, "模板特效应用失败", "Template effect application failed")
 
     # ===== 系统错误码 (9000-9999) =====
     INTERNAL_SERVER_ERROR = (9998, "系统内部错误", "Internal server error")
