@@ -61,6 +61,9 @@ class CustomError(Enum):
     TEMPLATE_TEXT_REPLACE_FAILED = (2058, "模板文字替换失败", "Template text replacement failed")
     TEMPLATE_IMAGE_REPLACE_FAILED = (2059, "模板图片替换失败", "Template image replacement failed")
     TEMPLATE_EFFECT_APPLY_FAILED = (2060, "模板特效应用失败", "Template effect application failed")
+    TEMPLATE_COPY_ERROR = (2061, "模板复制失败", "Template copy failed")
+    DRAFT_CREATE_ERROR = (2062, "草稿创建失败", "Draft creation failed")
+    PARAMETER_ERROR = (2063, "参数错误", "Parameter error")
 
     # ===== 系统错误码 (9000-9999) =====
     INTERNAL_SERVER_ERROR = (9998, "系统内部错误", "Internal server error")

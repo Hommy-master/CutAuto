@@ -127,7 +127,7 @@ def mock_script_file():
 @pytest.fixture
 def mock_processor_factory():
     """模拟处理器工厂"""
-    with patch('src.service.template.ProcessorFactory') as mock:
+    with patch('src.service.template_factory.ProcessorFactory') as mock:
         mock.exists.return_value = True
         mock.list.return_value = ["688001", "688002", "688003"]
         yield mock

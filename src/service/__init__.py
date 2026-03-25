@@ -1,4 +1,3 @@
-from .create_draft import create_draft
 from .template_factory import (
     create_draft as create_template_draft,
     list_all,
@@ -11,7 +10,6 @@ from .template_processor_688002 import Processor688002
 from .template_processor_688003 import Processor688003
 
 __all__ = [
-    "create_draft",
     "create_template_draft",
     "list_all",
     "validate_params",

@@ -1,11 +1,10 @@
-from .create_draft import CreateDraftRequest, CreateDraftResponse
 from .template_base import (
     VideoMaterial,
     AudioMaterial,
     ImageMaterial,
     TextMaterial,
     StickerMaterial,
-    CreateDraftResponse as TemplateCreateDraftResponse,
+    CreateDraftResponse,
     TemplateInfo,
 )
 from .template_688001 import CreateDraftRequest688001
@@ -14,12 +13,10 @@ from .template_688003 import CreateDraftRequest688003
 from .template_registry import list_templates, get_template_request, TEMPLATE_REGISTRY
 
 __all__ = [
-    "CreateDraftRequest",
-    "CreateDraftResponse",
     "CreateDraftRequest688001",
     "CreateDraftRequest688002",
     "CreateDraftRequest688003",
-    "TemplateCreateDraftResponse",
+    "CreateDraftResponse",
     "TemplateInfo",
     "VideoMaterial",
     "AudioMaterial",

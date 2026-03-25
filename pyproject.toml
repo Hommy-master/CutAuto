@@ -14,3 +14,9 @@ dependencies = [
     "requests>=2.32.5",
     "uvicorn[standard]>=0.35.0",
 ]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.2",
+]

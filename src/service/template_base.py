@@ -44,10 +44,17 @@ class BaseProcessor(ABC):
         """
         生成唯一草稿ID
         
+        格式: {timestamp}{random} (共22位)
+        - 时间戳: 14位 (YYYYMMDDhhmmss)
+        - 随机字符: 8位 (uuid前8位)
+        
         Returns:
             草稿ID字符串
         """
-        return f"{self.template_id}_{uuid.uuid4().hex[:8]}"
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        unique_id = uuid.uuid4().hex[:8]
+        return f"{timestamp}{unique_id}"
     
     @abstractmethod
     def process(self, params: Any) -> Dict[str, Any]:

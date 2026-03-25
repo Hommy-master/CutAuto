@@ -11,7 +11,6 @@ V1 路由模块
 from typing import Dict, Any, List
 from fastapi import APIRouter, HTTPException, Body, Path
 
-from src.schemas.create_draft import CreateDraftRequest, CreateDraftResponse as BasicCreateDraftResponse
 from src.schemas.template_base import CreateDraftResponse, TemplateInfo
 from src.schemas.template_688001 import CreateDraftRequest688001
 from src.schemas.template_688002 import CreateDraftRequest688002
@@ -23,7 +22,6 @@ from src.service.template_factory import (
     validate_params,
     ProcessorFactory
 )
-from src import service
 from src.utils.logger import logger
 from exceptions import CustomException
 import config
@@ -225,11 +223,10 @@ async def create_draft_688001(
     """
     使用 688001 模板创建草稿（视频混剪模板）
     
-    该模板适用于多视频混剪场景，支持：
-    - 最多10个视频素材
-    - 背景音乐替换
-    - 标题文字自定义
-    - 转场效果选择
+    该模板适用于图片轮播场景，支持：
+    - 替换3张图片素材（image1, image2, image3）
+    - 替换背景音乐（bgm）
+    - 自动处理文件格式转换
     
     Args:
         params: 688001模板参数
@@ -237,7 +234,7 @@ async def create_draft_688001(
     Returns:
         草稿创建结果
     """
-    logger.info(f"使用 688001 模板创建草稿，视频数量: {len(params.videos)}")
+    logger.info(f"使用 688001 模板创建草稿")
     
     try:
         result = create_template_draft("688001", params)
@@ -284,7 +281,7 @@ async def create_draft_688002(
     Returns:
         草稿创建结果
     """
-    logger.info(f"使用 688002 模板创建草稿，图片数量: {len(params.images)}")
+    logger.info(f"使用 688002 模板创建草稿")
     
     try:
         result = create_template_draft("688002", params)

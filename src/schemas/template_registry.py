@@ -44,9 +44,9 @@ def list_templates() -> List[Dict[str, Any]]:
     templates = [
         {
             "template_id": "688001",
-            "name": "视频混剪模板",
-            "description": "多视频混剪 + 背景音乐 + 标题文字",
-            "supported_features": ["video", "audio", "text", "transition"]
+            "name": "图片轮播模板",
+            "description": "3张图片轮播 + 背景音乐",
+            "supported_features": ["image", "audio"]
         },
         {
             "template_id": "688002",
@@ -62,3 +62,25 @@ def list_templates() -> List[Dict[str, Any]]:
         }
     ]
     return templates
+
+
+# ==================== 注册所有模板请求类 ====================
+# 延迟导入避免循环依赖，在模块加载时注册
+
+def _register_all_templates():
+    """注册所有模板请求类到注册表"""
+    try:
+        from .template_688001 import CreateDraftRequest688001
+        from .template_688002 import CreateDraftRequest688002
+        from .template_688003 import CreateDraftRequest688003
+        
+        register_template("688001", CreateDraftRequest688001)
+        register_template("688002", CreateDraftRequest688002)
+        register_template("688003", CreateDraftRequest688003)
+    except ImportError:
+        # 测试时可能模块未完全加载
+        pass
+
+
+# 模块加载时自动注册
+_register_all_templates()
