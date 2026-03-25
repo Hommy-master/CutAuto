@@ -12,16 +12,12 @@ from typing import Dict, Any, List
 from fastapi import APIRouter, HTTPException, Body, Path
 
 from src.schemas.create_draft import CreateDraftRequest, CreateDraftResponse as BasicCreateDraftResponse
-from src.schemas.template import (
-    CreateDraftRequest688001,
-    CreateDraftRequest688002,
-    CreateDraftRequest688003,
-    CreateDraftResponse,
-    TemplateInfo,
-    list_templates,
-    get_template_request
-)
-from src.service.template import (
+from src.schemas.template_base import CreateDraftResponse, TemplateInfo
+from src.schemas.template_688001 import CreateDraftRequest688001
+from src.schemas.template_688002 import CreateDraftRequest688002
+from src.schemas.template_688003 import CreateDraftRequest688003
+from src.schemas.template_registry import list_templates, get_template_request
+from src.service.template_factory import (
     create_draft as create_template_draft,
     list_all,
     validate_params,
