@@ -7,12 +7,15 @@
 import os
 import shutil
 import uuid
+import datetime
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
 import config
+import src.pyJianYingDraft as draft
 from src.utils.logger import logger
 from src.utils.download import download
+from src.utils.draft_cache import update_cache
 from exceptions import CustomException, CustomError as ErrorCode
 
 
@@ -59,26 +62,68 @@ class BaseProcessor(ABC):
         """
         pass
     
-    def _copy_template(self) -> None:
+    def _copy_template(self) -> draft.ScriptFile:
         """
-        复制模板文件到草稿目录
+        复制模板文件到草稿目录并加载为ScriptFile对象
         
+        参考 create_draft.py 的实现：
+        1. 复制模板目录到新草稿目录
+        2. 加载 draft_info.json 为 ScriptFile 对象
+        3. 启用双文件兼容模式
+        4. 保存初始化后的草稿
+        
+        Returns:
+            ScriptFile: 加载的脚本文件对象，可用于后续编辑
+            
         Raises:
-            CustomException: 模板复制失败
+            CustomException: 模板复制失败或加载失败
         """
         try:
-            if os.path.exists(self.template_path):
-                shutil.copytree(self.template_path, self.draft_path)
-                logger.info(f"模板复制成功: {self.template_path} -> {self.draft_path}")
-            else:
-                # 如果模板目录不存在，创建空目录
-                os.makedirs(self.draft_path, exist_ok=True)
-                logger.warning(f"模板目录不存在，创建空目录: {self.draft_path}")
+            # 1. 检查模板目录是否存在
+            if not os.path.exists(self.template_path):
+                logger.error(f"模板目录不存在: {self.template_path}")
+                raise CustomException(
+                    ErrorCode.TEMPLATE_NOT_FOUND,
+                    detail=f"模板 {self.template_id} 不存在"
+                )
+            
+            # 2. 如果草稿目录已存在，先删除
+            if os.path.exists(self.draft_path):
+                shutil.rmtree(self.draft_path)
+                logger.info(f"已删除已存在的草稿目录: {self.draft_path}")
+            
+            # 3. 复制模板到新草稿目录
+            shutil.copytree(self.template_path, self.draft_path)
+            logger.info(f"模板复制成功: {self.template_path} -> {self.draft_path}")
+            
+            # 4. 加载模板草稿
+            draft_info_path = os.path.join(self.draft_path, "draft_info.json")
+            draft_content_path = os.path.join(self.draft_path, "draft_content.json")
+            
+            # 检查必要的文件是否存在
+            if not os.path.exists(draft_info_path):
+                logger.warning(f"draft_info.json 不存在: {draft_info_path}")
+            
+            # 5. 加载模板草稿
+            script = draft.ScriptFile.load_template(draft_info_path)
+            
+            # 6. 启用双文件兼容模式，保存时会自动同步两个文件
+            script.dual_file_compatibility = True
+            
+            # 7. 设置保存路径并保存
+            script.save_path = draft_content_path
+            script.save()
+            
+            logger.info(f"模板草稿加载成功: {self.draft_id}")
+            return script
+            
+        except CustomException:
+            raise
         except Exception as e:
             logger.error(f"模板复制失败: {e}")
             raise CustomException(
                 ErrorCode.TEMPLATE_COPY_ERROR,
-                detail=f"无法复制模板 {self.template_id}"
+                detail=f"无法复制模板 {self.template_id}: {str(e)}"
             )
     
     def _download_material(self, url: str, filename: Optional[str] = None) -> str:

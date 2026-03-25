@@ -125,16 +125,24 @@ class ResponseMiddleware(BaseHTTPMiddleware):
         try:
             data = json.loads(body_str)
             
-            # 如果响应已经有统一格式，直接返回
-            if 'code' in data and 'message' in data:
+            # 如果响应已经有统一格式（dict类型且包含code和message），直接返回
+            if isinstance(data, dict) and 'code' in data and 'message' in data:
                 return response
-                
-            # 创建统一格式的响应（成功响应保留data字段）
-            unified_response = {
-                'code': CustomError.SUCCESS.code,
-                'message': CustomError.SUCCESS.as_dict(lang=lang)['message'],
-                **data
-            }
+            
+            # 如果响应是列表类型，包装到data字段中
+            if isinstance(data, list):
+                unified_response = {
+                    'code': CustomError.SUCCESS.code,
+                    'message': CustomError.SUCCESS.as_dict(lang=lang)['message'],
+                    'data': data
+                }
+            else:
+                # 创建统一格式的响应（成功响应保留data字段）
+                unified_response = {
+                    'code': CustomError.SUCCESS.code,
+                    'message': CustomError.SUCCESS.as_dict(lang=lang)['message'],
+                    **data
+                }
             
             return JSONResponse(
                 status_code=response.status_code,

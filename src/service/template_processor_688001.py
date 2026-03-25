@@ -50,9 +50,10 @@ class Processor688001(BaseProcessor):
         """
         logger.info(f"开始处理 688001 模板")
         
+        script = None
         try:
-            # 1. 复制模板到草稿目录
-            self._copy_template()
+            # 1. 复制模板到草稿目录并加载为ScriptFile对象
+            script = self._copy_template()
             
             # 2. 下载并替换图片文件
             image_replacements = {}
@@ -73,7 +74,12 @@ class Processor688001(BaseProcessor):
             # 4. 更新 draft_content.json 中的路径
             self._update_draft_content(image_replacements, audio_replacement)
             
-            # 5. 构建响应
+            # 5. 重新加载并保存ScriptFile（确保同步到draft_info.json）
+            if script:
+                script.save()
+                logger.info(f"ScriptFile 已保存并同步到 draft_info.json")
+            
+            # 6. 构建响应
             result = self._build_response(estimated_duration=30.0)
             
             logger.info(f"688001 模板处理完成: {result['draft_id']}")

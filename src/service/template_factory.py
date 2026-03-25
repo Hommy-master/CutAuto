@@ -118,7 +118,7 @@ def list_all() -> List[Dict[str, Any]]:
     Returns:
         模板信息列表
     """
-    from src.schemas.template import list_templates
+    from src.schemas.template_registry import list_templates
     return list_templates()
 
 

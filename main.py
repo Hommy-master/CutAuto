@@ -14,7 +14,7 @@ app: FastAPI = FastAPI(
 )
 
 # 2. 注册路由
-app.include_router(router=v1_router, prefix="/openapi/cutauto/v1", tags=["cutauto"])
+app.include_router(router=v1_router, prefix="/openapi/cutauto", tags=["cutauto"])
 
 # 3. 添加中间件
 app.add_middleware(middleware_class=PrepareMiddleware)
