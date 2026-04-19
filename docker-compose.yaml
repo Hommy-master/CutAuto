@@ -10,11 +10,13 @@ services:
       #- /etc/localtime:/etc/localtime:ro  # 挂载主机时区
       #- /etc/timezone:/etc/timezone:ro    # 挂载时区名称（可选）
     environment:
-      # 草稿下载URL
-      - DRAFT_URL=http://127.0.0.1/openapi/capcut-mate/v1/get_draft
-      # 用于将容器内部的文件路径转成URL，本质是将/app/替换成DOWNLOAD_URL得到下载路径
+      # 草稿下载 URL（同一网络内用服务名访问 capcut-mate 容器内端口 30000）
+      - DRAFT_URL=http://capcut-mate:30000/openapi/capcut-mate/v1/get_draft
+      # 将容器内路径转成对外下载地址；浏览器可访问时请改为宿主机或域名，例如 http://127.0.0.1/
       - DOWNLOAD_URL=http://127.0.0.1/
     restart: unless-stopped  # 除非手动停止，否则总是重启容器
+    networks:
+      - cutauto-network
 
   capcut-mate:
     image: gogoshine/capcut-mate:latest
@@ -27,11 +29,11 @@ services:
       #- /etc/localtime:/etc/localtime:ro  # 挂载主机时区
       #- /etc/timezone:/etc/timezone:ro    # 挂载时区名称（可选）
     environment:
-      # 草稿下载URL
-      - DRAFT_URL=http://127.0.0.1/openapi/capcut-mate/v1/get_draft
-      # 用于将容器内部的文件路径转成URL，本质是将/app/替换成DOWNLOAD_URL得到下载路径
+      - DRAFT_URL=http://capcut-mate:30000/openapi/capcut-mate/v1/get_draft
       - DOWNLOAD_URL=http://127.0.0.1/
     restart: unless-stopped
+    networks:
+      - cutauto-network
 
   nginx:
     image: gogoshine/nginx:latest
@@ -39,10 +41,21 @@ services:
     ports:
       - "80:80"
     environment:
-      - PROXY_PASS_URL_1=http://127.0.0.1:30000/openapi/cutauto/
+      # 反代到同网络内服务（容器内监听端口：cutauto 30000，capcut-mate 30000）
+      - PROXY_PASS_URL_1=http://cutauto:30000/openapi/cutauto/
       - PROXY_LOCATION_1=/openapi/cutauto/
-      - PROXY_PASS_URL_2=http://127.0.0.1:30001/openapi/capcut-mate/
+      - PROXY_PASS_URL_2=http://capcut-mate:30000/openapi/capcut-mate/
       - PROXY_LOCATION_2=/openapi/capcut-mate/
     volumes:
       - ./html:/usr/share/nginx/html
     restart: unless-stopped
+    depends_on:
+      - cutauto
+      - capcut-mate
+    networks:
+      - cutauto-network
+
+networks:
+  cutauto-network:
+    driver: bridge
+    name: cutauto-network
