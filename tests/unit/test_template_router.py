@@ -128,7 +128,7 @@ class TestCreateDraftWithTemplate:
             "draft_url": "https://example.com/draft",
             "tip_url": "https://docs.example.com",
             "template_id": "688001",
-            "estimated_duration": 30.0
+            "estimated_duration": 30.0,
         }
 
         response = client.post(
@@ -193,7 +193,7 @@ class TestCreateDraft688001:
             "draft_url": "https://example.com/draft",
             "tip_url": "https://docs.example.com",
             "template_id": "688001",
-            "estimated_duration": 30.0
+            "estimated_duration": 30.0,
         }
 
         response = client.post(

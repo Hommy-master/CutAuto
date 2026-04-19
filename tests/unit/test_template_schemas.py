@@ -425,21 +425,14 @@ class TestCreateDraftResponse:
             code=0,
             message="success",
             draft_url="https://example.com/draft?id=123",
-            draft_id="2024032512000012345678",
-            tip_url="https://docs.example.com",
-            template_id="688001",
-            estimated_duration=30.5
         )
         assert response.code == 0
-        assert response.draft_id == "2024032512000012345678"
+        assert response.draft_url.startswith("https://example.com/draft")
 
     def test_default_values(self):
         """测试默认值"""
         response = CreateDraftResponse(
             draft_url="https://example.com/draft?id=123",
-            draft_id="123",
-            tip_url="https://docs.example.com",
-            template_id="688001"
         )
         assert response.code == 0
         assert response.message == "success"
@@ -541,10 +534,7 @@ class TestJsonSerialization:
         """测试响应模型字典转换"""
         response = CreateDraftResponse(
             draft_url="https://example.com/draft",
-            draft_id="123",
-            tip_url="https://docs.example.com",
-            template_id="688001"
         )
         data = response.model_dump()
         assert data["code"] == 0
-        assert data["draft_id"] == "123"
+        assert data["draft_url"] == "https://example.com/draft"

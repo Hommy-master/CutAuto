@@ -105,10 +105,6 @@ class CreateDraftResponse(BaseModel):
     code: int = Field(0, description="状态码，0表示成功")
     message: str = Field("success", description="状态信息")
     draft_url: str = Field(..., description="草稿下载URL")
-    draft_id: str = Field(..., description="草稿ID")
-    tip_url: str = Field(..., description="帮助文档URL")
-    template_id: str = Field(..., description="使用的模板ID")
-    estimated_duration: Optional[float] = Field(None, description="预估视频时长（秒）")
 
 
 class TemplateInfo(BaseModel):

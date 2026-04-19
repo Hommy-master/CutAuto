@@ -189,10 +189,6 @@ async def create_draft_with_template(
             code=0,
             message="success",
             draft_url=result["draft_url"],
-            draft_id=result["draft_id"],
-            tip_url=result["tip_url"],
-            template_id=result["template_id"],
-            estimated_duration=result.get("estimated_duration")
         )
         
     except CustomException as e:
@@ -248,10 +244,6 @@ async def create_draft_688001(
             code=0,
             message="success",
             draft_url=result["draft_url"],
-            draft_id=result["draft_id"],
-            tip_url=result["tip_url"],
-            template_id="688001",
-            estimated_duration=result.get("estimated_duration")
         )
         
     except CustomException as e:
@@ -295,10 +287,6 @@ async def create_draft_688002(
             code=0,
             message="success",
             draft_url=result["draft_url"],
-            draft_id=result["draft_id"],
-            tip_url=result["tip_url"],
-            template_id="688002",
-            estimated_duration=result.get("estimated_duration")
         )
         
     except CustomException as e:
@@ -342,10 +330,6 @@ async def create_draft_688003(
             code=0,
             message="success",
             draft_url=result["draft_url"],
-            draft_id=result["draft_id"],
-            tip_url=result["tip_url"],
-            template_id="688003",
-            estimated_duration=result.get("estimated_duration")
         )
         
     except CustomException as e:
