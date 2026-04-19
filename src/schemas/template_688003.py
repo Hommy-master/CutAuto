@@ -4,7 +4,7 @@
 该模板适用于：单视频 + 特效 + 贴纸 + 字幕
 """
 
-from typing import List, Optional, Literal
+from typing import List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 from src.schemas.template_base import VideoMaterial, TextMaterial, StickerMaterial
@@ -16,9 +16,9 @@ class CreateDraftRequest688003(BaseModel):
     
     该模板适用于：单视频 + 特效 + 贴纸 + 字幕
     支持添加特效、贴纸和字幕到主视频
-    """
-    template_id: Literal["688003"] = Field("688003", description="模板ID，固定为688003")
     
+    模板 ID 由路径 `/templates/{template_id}/drafts` 指定，请求体中无需再传 template_id。
+    """
     # 主视频（必须）
     video: VideoMaterial = Field(
         ...,
@@ -80,7 +80,6 @@ class CreateDraftRequest688003(BaseModel):
     model_config = {
         "json_schema_extra": {
             "example": {
-                "template_id": "688003",
                 "video": {
                     "url": "https://example.com/main.mp4",
                     "material_name": "主视频"

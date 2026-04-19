@@ -215,32 +215,27 @@ class TestCreateDraftRequest688001:
     def test_valid_request_all_fields(self):
         """测试完整的有效请求参数"""
         request = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/image1.jpg",
             image2="https://example.com/image2.png",
             image3="https://example.com/image3.jpg",
             bgm="https://example.com/music.mp3"
         )
-        assert request.template_id == "688001"
         assert str(request.image1).startswith("https://example.com/image1.jpg")
         assert str(request.bgm).startswith("https://example.com/music.mp3")
 
     def test_valid_request_no_bgm(self):
         """测试不传背景音乐（bgm 为可选）"""
         request = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/image1.jpg",
             image2="https://example.com/image2.png",
             image3="https://example.com/image3.jpg"
         )
-        assert request.template_id == "688001"
         assert request.bgm is None
 
     def test_missing_image1(self):
         """测试缺少 image1（必填）"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688001(
-                template_id="688001",
                 image2="https://example.com/image2.png",
                 image3="https://example.com/image3.jpg"
             )
@@ -250,7 +245,6 @@ class TestCreateDraftRequest688001:
         """测试缺少 image2（必填）"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688001(
-                template_id="688001",
                 image1="https://example.com/image1.jpg",
                 image3="https://example.com/image3.jpg"
             )
@@ -260,7 +254,6 @@ class TestCreateDraftRequest688001:
         """测试缺少 image3（必填）"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688001(
-                template_id="688001",
                 image1="https://example.com/image1.jpg",
                 image2="https://example.com/image2.png"
             )
@@ -270,22 +263,11 @@ class TestCreateDraftRequest688001:
         """测试无效的图片URL"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688001(
-                template_id="688001",
                 image1="not-a-valid-url",
                 image2="https://example.com/image2.png",
                 image3="https://example.com/image3.jpg"
             )
         assert "image1" in str(exc_info.value)
-
-    def test_default_template_id(self):
-        """测试 template_id 默认值"""
-        request = CreateDraftRequest688001(
-            image1="https://example.com/image1.jpg",
-            image2="https://example.com/image2.png",
-            image3="https://example.com/image3.jpg"
-        )
-        assert request.template_id == "688001"
-
 
 # ==================== 模板 688002 请求模型测试 ====================
 
@@ -295,7 +277,6 @@ class TestCreateDraftRequest688002:
     def test_valid_request(self):
         """测试有效的请求参数"""
         request = CreateDraftRequest688002(
-            template_id="688002",
             images=[
                 ImageMaterial(url="https://example.com/i1.jpg", duration=5),
                 ImageMaterial(url="https://example.com/i2.jpg", duration=5),
@@ -311,7 +292,6 @@ class TestCreateDraftRequest688002:
         """测试最少图片数量验证"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688002(
-                template_id="688002",
                 images=[ImageMaterial(url="https://example.com/i1.jpg", duration=5)]
                 # 至少需要2张图片
             )
@@ -321,7 +301,6 @@ class TestCreateDraftRequest688002:
         """测试最多图片数量验证"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688002(
-                template_id="688002",
                 images=[
                     ImageMaterial(url=f"https://example.com/i{i}.jpg", duration=5)
                     for i in range(21)  # 最多20张图片
@@ -333,7 +312,6 @@ class TestCreateDraftRequest688002:
         """测试无效的动画类型"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688002(
-                template_id="688002",
                 images=[
                     ImageMaterial(url="https://example.com/i1.jpg", duration=5),
                     ImageMaterial(url="https://example.com/i2.jpg", duration=5)
@@ -346,7 +324,6 @@ class TestCreateDraftRequest688002:
         """测试图片显示时长范围"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688002(
-                template_id="688002",
                 images=[
                     ImageMaterial(url="https://example.com/i1.jpg", duration=5),
                     ImageMaterial(url="https://example.com/i2.jpg", duration=5)
@@ -364,7 +341,6 @@ class TestCreateDraftRequest688003:
     def test_valid_request(self):
         """测试有效的请求参数"""
         request = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4"),
             subtitles=[
                 TextMaterial(content="字幕1", start_time=0, duration=3),
@@ -383,17 +359,13 @@ class TestCreateDraftRequest688003:
     def test_required_video_field(self):
         """测试必填的视频字段"""
         with pytest.raises(ValidationError) as exc_info:
-            CreateDraftRequest688003(
-                template_id="688003"
-                # video 是必填字段
-            )
+            CreateDraftRequest688003()
         assert "video" in str(exc_info.value)
 
     def test_max_subtitles_validation(self):
         """测试最多字幕数量验证"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688003(
-                template_id="688003",
                 video=VideoMaterial(url="https://example.com/main.mp4"),
                 subtitles=[
                     TextMaterial(content=f"字幕{i}", duration=1)
@@ -406,7 +378,6 @@ class TestCreateDraftRequest688003:
         """测试最多贴纸数量验证"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688003(
-                template_id="688003",
                 video=VideoMaterial(url="https://example.com/main.mp4"),
                 stickers=[
                     StickerMaterial(sticker_id=f"sticker_{i}", duration=1)
@@ -419,7 +390,6 @@ class TestCreateDraftRequest688003:
         """测试无效的视频特效"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688003(
-                template_id="688003",
                 video=VideoMaterial(url="https://example.com/main.mp4"),
                 video_effect="invalid_effect"
             )
@@ -429,7 +399,6 @@ class TestCreateDraftRequest688003:
         """测试无效的导出质量"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688003(
-                template_id="688003",
                 video=VideoMaterial(url="https://example.com/main.mp4"),
                 export_quality="8k"  # 不支持8k
             )
@@ -439,7 +408,6 @@ class TestCreateDraftRequest688003:
         """测试滤镜强度范围"""
         with pytest.raises(ValidationError) as exc_info:
             CreateDraftRequest688003(
-                template_id="688003",
                 video=VideoMaterial(url="https://example.com/main.mp4"),
                 filter_intensity=1.5  # 应该在0-1之间
             )
@@ -561,13 +529,12 @@ class TestJsonSerialization:
     def test_688001_request_json(self):
         """测试 688001 请求参数 JSON 序列化"""
         request = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/image1.jpg",
             image2="https://example.com/image2.png",
             image3="https://example.com/image3.jpg"
         )
         json_data = request.model_dump_json()
-        assert "688001" in json_data
+        assert "example.com/image1.jpg" in json_data
         assert "image1" in json_data
 
     def test_response_dict(self):

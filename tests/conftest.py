@@ -70,7 +70,6 @@ def mock_text_material():
 def valid_688001_request(mock_video_material, mock_audio_material, mock_text_material):
     """有效的 688001 模板请求"""
     return {
-        "template_id": "688001",
         "videos": [
             mock_video_material,
             {**mock_video_material, "url": "https://example.com/video2.mp4", "duration": 8.0}
@@ -85,7 +84,6 @@ def valid_688001_request(mock_video_material, mock_audio_material, mock_text_mat
 def valid_688002_request(mock_image_material, mock_audio_material):
     """有效的 688002 模板请求"""
     return {
-        "template_id": "688002",
         "images": [
             mock_image_material,
             {**mock_image_material, "url": "https://example.com/image2.jpg"},
@@ -101,7 +99,6 @@ def valid_688002_request(mock_image_material, mock_audio_material):
 def valid_688003_request(mock_video_material, mock_text_material):
     """有效的 688003 模板请求"""
     return {
-        "template_id": "688003",
         "video": mock_video_material,
         "subtitles": [
             mock_text_material,

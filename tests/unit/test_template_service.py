@@ -90,7 +90,6 @@ class TestValidateParams:
     def test_validate_688002_params(self):
         """测试验证 688002 参数"""
         params = {
-            "template_id": "688002",
             "images": [
                 {"url": "https://example.com/i1.jpg", "duration": 5},
                 {"url": "https://example.com/i2.jpg", "duration": 5}
@@ -102,7 +101,6 @@ class TestValidateParams:
     def test_validate_688003_params(self):
         """测试验证 688003 参数"""
         params = {
-            "template_id": "688003",
             "video": {"url": "https://example.com/main.mp4"}
         }
         result = validate_params("688003", params)
@@ -111,14 +109,12 @@ class TestValidateParams:
     def test_validate_688001_params(self):
         """测试验证 688001 参数"""
         params = {
-            "template_id": "688001",
             "image1": "https://example.com/image1.jpg",
             "image2": "https://example.com/image2.png",
             "image3": "https://example.com/image3.jpg"
         }
         result = validate_params("688001", params)
         assert isinstance(result, CreateDraftRequest688001)
-        assert result.template_id == "688001"
 
     def test_validate_invalid_template(self):
         """测试验证无效的模板"""
@@ -129,7 +125,6 @@ class TestValidateParams:
     def test_validate_invalid_params_688002(self):
         """测试验证无效的参数（688002 图片数量不足）"""
         params = {
-            "template_id": "688002",
             "images": []  # 至少需要2张图片
         }
         with pytest.raises(CustomException) as exc_info:
@@ -139,7 +134,6 @@ class TestValidateParams:
     def test_validate_invalid_params_688001_missing_image(self):
         """测试验证 688001 缺少必填图片"""
         params = {
-            "template_id": "688001",
             "image1": "https://example.com/image1.jpg"
             # 缺少 image2 和 image3
         }
@@ -198,7 +192,6 @@ class TestCreateDraft:
         mock_get.return_value = None
 
         params = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/i1.jpg",
             image2="https://example.com/i2.jpg",
             image3="https://example.com/i3.jpg"
@@ -221,7 +214,6 @@ class TestCreateDraft:
         mock_get.return_value = mock_processor
 
         params = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/i1.jpg",
             image2="https://example.com/i2.jpg",
             image3="https://example.com/i3.jpg"
@@ -266,7 +258,6 @@ class TestProcessor688002:
     def test_default_image_display_duration(self):
         """测试默认图片显示时长"""
         params = CreateDraftRequest688002(
-            template_id="688002",
             images=[
                 ImageMaterial(url="https://example.com/i1.jpg", duration=5),
                 ImageMaterial(url="https://example.com/i2.jpg", duration=5)
@@ -286,7 +277,6 @@ class TestProcessor688003:
     def test_default_filter_intensity(self):
         """测试默认滤镜强度"""
         params = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4")
         )
         assert params.filter_intensity == 0.5
@@ -294,7 +284,6 @@ class TestProcessor688003:
     def test_default_export_quality(self):
         """测试默认导出质量"""
         params = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4")
         )
         assert params.export_quality == "1080p"
@@ -342,7 +331,6 @@ class TestEdgeCases:
             ImageMaterial(url="https://example.com/i2.jpg", duration=5)
         ]
         params = CreateDraftRequest688002(
-            template_id="688002",
             images=images
         )
         assert len(params.images) == 2
@@ -354,7 +342,6 @@ class TestEdgeCases:
             for i in range(20)
         ]
         params = CreateDraftRequest688002(
-            template_id="688002",
             images=images
         )
         assert len(params.images) == 20
@@ -362,7 +349,6 @@ class TestEdgeCases:
     def test_688003_exactly_20_subtitles(self):
         """测试 688003 最多20条字幕"""
         params = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4"),
             subtitles=[
                 TextMaterial(content=f"字幕{i}", duration=1)
@@ -376,7 +362,6 @@ class TestEdgeCases:
         from src.schemas.template_base import StickerMaterial
 
         params = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4"),
             stickers=[
                 StickerMaterial(sticker_id=f"sticker_{i}", duration=1)

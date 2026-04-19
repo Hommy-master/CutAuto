@@ -5,7 +5,7 @@
 支持替换3张图片和背景音乐
 """
 
-from typing import Optional, Literal
+from typing import Optional
 from pydantic import BaseModel, Field, HttpUrl
 
 
@@ -15,9 +15,9 @@ class CreateDraftRequest688001(BaseModel):
     
     该模板适用于：图片轮播 + 背景音乐
     支持替换3张图片(image1, image2, image3)和背景音乐(bgm)
-    """
-    template_id: Literal["688001"] = Field("688001", description="模板ID，固定为688001")
     
+    模板 ID 由路径 `/templates/{template_id}/drafts` 指定，请求体中无需再传 template_id。
+    """
     # 第一张图片（必填）
     image1: HttpUrl = Field(
         ...,
@@ -45,7 +45,6 @@ class CreateDraftRequest688001(BaseModel):
     model_config = {
         "json_schema_extra": {
             "example": {
-                "template_id": "688001",
                 "image1": "https://example.com/image1.jpg",
                 "image2": "https://example.com/image2.png",
                 "image3": "https://example.com/image3.jpg",

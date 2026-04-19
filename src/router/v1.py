@@ -137,10 +137,15 @@ def _get_template_limits(template_id: str) -> Dict[str, int]:
 )
 async def create_draft_with_template(
     template_id: str = Path(..., description="模板ID，如：688001、688002、688003"),
-    params: Dict[str, Any] = Body(..., description="模板参数，根据模板类型不同而不同")
+    params: Dict[str, Any] = Body(
+        ...,
+        description="模板参数（不含 template_id，模板由 URL 路径中的 template_id 指定），根据模板类型不同而不同",
+    )
 ) -> CreateDraftResponse:
     """
     使用指定模板创建剪映草稿
+    
+    模板 ID 仅取自 URL 路径，请求体中不需要、也不应再传 template_id。
     
     根据不同模板ID，需要传入不同的参数：
     - 688001: 视频混剪模板，需要传入 videos、audio、title 等参数
@@ -361,12 +366,15 @@ async def create_draft_688003(
 )
 async def validate_template(
     template_id: str = Path(..., description="模板ID"),
-    params: Dict[str, Any] = Body(..., description="待验证的参数")
+    params: Dict[str, Any] = Body(
+        ...,
+        description="待验证的模板参数（不含 template_id，模板由路径中的 template_id 指定）",
+    )
 ) -> Dict[str, Any]:
     """
     验证模板参数
     
-    用于在实际创建草稿前验证参数是否合法。
+    用于在实际创建草稿前验证参数是否合法。模板 ID 仅取自 URL 路径。
     
     Args:
         template_id: 模板ID
@@ -395,7 +403,7 @@ async def validate_template(
             "message": "参数验证通过",
             "template_id": template_id,
             "params_summary": {
-                "template_id": validated_params.template_id
+                "template_id": template_id
             }
         }
         

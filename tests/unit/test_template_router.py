@@ -122,7 +122,7 @@ class TestCreateDraftWithTemplate:
     def test_create_draft_success(self, mock_create, mock_validate, mock_exists):
         """测试成功创建草稿"""
         mock_exists.return_value = True
-        mock_validate.return_value = Mock(template_id="688001")
+        mock_validate.return_value = Mock()
         mock_create.return_value = {
             "draft_id": "2024032512000012345678",
             "draft_url": "https://example.com/draft",
@@ -134,7 +134,6 @@ class TestCreateDraftWithTemplate:
         response = client.post(
             f"{BASE}/688001/drafts",
             json={
-                "template_id": "688001",
                 "image1": "https://example.com/image1.jpg",
                 "image2": "https://example.com/image2.png",
                 "image3": "https://example.com/image3.jpg"
@@ -152,7 +151,7 @@ class TestCreateDraftWithTemplate:
 
         response = client.post(
             f"{BASE}/999999/drafts",
-            json={"template_id": "999999"}
+            json={}
         )
 
         # 中间件处理错误响应
@@ -172,7 +171,7 @@ class TestCreateDraftWithTemplate:
 
         response = client.post(
             f"{BASE}/688001/drafts",
-            json={"template_id": "688001"}
+            json={}
         )
 
         # 中间件处理错误响应
@@ -200,7 +199,6 @@ class TestCreateDraft688001:
         response = client.post(
             f"{BASE}/688001/drafts",
             json={
-                "template_id": "688001",
                 "image1": "https://example.com/image1.jpg",
                 "image2": "https://example.com/image2.png",
                 "image3": "https://example.com/image3.jpg",
@@ -215,10 +213,7 @@ class TestCreateDraft688001:
         """测试缺少必填图片参数"""
         response = client.post(
             f"{BASE}/688001/drafts",
-            json={
-                "template_id": "688001"
-                # 缺少 image1, image2, image3
-            }
+            json={}
         )
 
         # 中间件将422转换为200+错误码
@@ -247,7 +242,6 @@ class TestCreateDraft688002:
         response = client.post(
             f"{BASE}/688002/drafts",
             json={
-                "template_id": "688002",
                 "images": [
                     {"url": "https://example.com/i1.jpg", "duration": 5},
                     {"url": "https://example.com/i2.jpg", "duration": 5},
@@ -265,7 +259,6 @@ class TestCreateDraft688002:
         response = client.post(
             f"{BASE}/688002/drafts",
             json={
-                "template_id": "688002",
                 "images": [
                     {"url": "https://example.com/i1.jpg", "duration": 5}
                     # 至少需要2张图片
@@ -299,7 +292,6 @@ class TestCreateDraft688003:
         response = client.post(
             f"{BASE}/688003/drafts",
             json={
-                "template_id": "688003",
                 "video": {"url": "https://example.com/main.mp4"},
                 "subtitles": [
                     {"content": "字幕1", "start_time": 0, "duration": 3}
@@ -316,10 +308,7 @@ class TestCreateDraft688003:
         """测试缺少主视频"""
         response = client.post(
             f"{BASE}/688003/drafts",
-            json={
-                "template_id": "688003"
-                # video 是必填字段
-            }
+            json={}
         )
 
         assert response.status_code in (200, 422)
@@ -338,12 +327,11 @@ class TestValidateTemplate:
     def test_validate_template_success(self, mock_validate, mock_exists):
         """测试成功验证模板参数"""
         mock_exists.return_value = True
-        mock_validate.return_value = Mock(template_id="688001")
+        mock_validate.return_value = Mock()
 
         response = client.post(
             f"{BASE}/688001/validate",
             json={
-                "template_id": "688001",
                 "image1": "https://example.com/image1.jpg",
                 "image2": "https://example.com/image2.png",
                 "image3": "https://example.com/image3.jpg"
@@ -360,7 +348,7 @@ class TestValidateTemplate:
 
         response = client.post(
             f"{BASE}/999999/validate",
-            json={"template_id": "999999"}
+            json={}
         )
 
         assert response.status_code == 200
@@ -378,7 +366,7 @@ class TestValidateTemplate:
 
         response = client.post(
             f"{BASE}/688001/validate",
-            json={"template_id": "688001"}
+            json={}
         )
 
         assert response.status_code == 200
@@ -452,7 +440,6 @@ class TestErrorResponses:
         response = client.post(
             f"{BASE}/688001/drafts",
             json={
-                "template_id": "688001",
                 "image1": "https://example.com/image1.jpg",
                 "image2": "https://example.com/image2.png",
                 "image3": "https://example.com/image3.jpg"

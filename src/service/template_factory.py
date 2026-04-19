@@ -146,6 +146,8 @@ def validate_params(template_id: str, params: Dict[str, Any]) -> Any:
         )
     
     try:
+        # 模板 ID 以 URL 路径为准；若 body 仍带 template_id 则忽略（兼容旧客户端）
+        params = {k: v for k, v in params.items() if k != "template_id"}
         # 使用Pydantic验证参数
         validated = request_class(**params)
         logger.info(f"参数验证通过: {template_id}")

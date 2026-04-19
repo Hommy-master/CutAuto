@@ -4,7 +4,7 @@
 该模板适用于：图片轮播 + 背景音乐 + 动态文字
 """
 
-from typing import List, Optional, Literal
+from typing import List, Optional
 from pydantic import BaseModel, Field, field_validator
 
 from src.schemas.template_base import ImageMaterial, AudioMaterial, TextMaterial
@@ -16,9 +16,9 @@ class CreateDraftRequest688002(BaseModel):
     
     该模板适用于：图片轮播 + 背景音乐 + 动态文字
     支持替换图片、背景音乐和动态文字
-    """
-    template_id: Literal["688002"] = Field("688002", description="模板ID，固定为688002")
     
+    模板 ID 由路径 `/templates/{template_id}/drafts` 指定，请求体中无需再传 template_id。
+    """
     # 图片素材列表（至少2张，最多20张）
     images: List[ImageMaterial] = Field(
         ...,
@@ -65,7 +65,6 @@ class CreateDraftRequest688002(BaseModel):
     model_config = {
         "json_schema_extra": {
             "example": {
-                "template_id": "688002",
                 "images": [
                     {
                         "url": "https://example.com/photo1.jpg",

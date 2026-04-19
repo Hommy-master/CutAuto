@@ -86,7 +86,6 @@ class TestTemplate688001Workflow(TestTemplateWorkflowBase):
         processor = Processor688001()
 
         params = CreateDraftRequest688001(
-            template_id="688001",
             image1="https://example.com/i1.jpg",
             image2="https://example.com/i2.jpg",
             image3="https://example.com/i3.jpg"
@@ -118,7 +117,6 @@ class TestTemplate688002Workflow(TestTemplateWorkflowBase):
     def test_calculate_estimated_duration(self):
         """测试计算预估时长"""
         params = CreateDraftRequest688002(
-            template_id="688002",
             images=[
                 ImageMaterial(url="https://example.com/i1.jpg", duration=5),
                 ImageMaterial(url="https://example.com/i2.jpg", duration=5),
@@ -149,7 +147,6 @@ class TestTemplate688003Workflow(TestTemplateWorkflowBase):
         from src.schemas.template_base import StickerMaterial
 
         params = CreateDraftRequest688003(
-            template_id="688003",
             video=VideoMaterial(url="https://example.com/main.mp4", duration=60),
             subtitles=[
                 TextMaterial(content=f"字幕{i}", start_time=i*3, duration=3)
@@ -217,7 +214,6 @@ class TestParameterValidationIntegration:
     def test_validate_688001_params(self):
         """测试验证 688001 参数（图片+bgm）"""
         params = {
-            "template_id": "688001",
             "image1": "https://example.com/image1.jpg",
             "image2": "https://example.com/image2.png",
             "image3": "https://example.com/image3.jpg",
@@ -227,12 +223,10 @@ class TestParameterValidationIntegration:
         result = validate_params("688001", params)
 
         assert isinstance(result, CreateDraftRequest688001)
-        assert result.template_id == "688001"
 
     def test_validate_688001_no_bgm(self):
         """测试验证 688001 参数（无背景音乐）"""
         params = {
-            "template_id": "688001",
             "image1": "https://example.com/image1.jpg",
             "image2": "https://example.com/image2.png",
             "image3": "https://example.com/image3.jpg"
@@ -245,7 +239,6 @@ class TestParameterValidationIntegration:
     def test_validate_688002_full_params(self):
         """测试验证完整的 688002 参数"""
         params = {
-            "template_id": "688002",
             "images": [
                 {"url": "https://example.com/i1.jpg", "duration": 5},
                 {"url": "https://example.com/i2.jpg", "duration": 5},
@@ -269,7 +262,6 @@ class TestParameterValidationIntegration:
     def test_validate_688003_full_params(self):
         """测试验证完整的 688003 参数"""
         params = {
-            "template_id": "688003",
             "video": {
                 "url": "https://example.com/main.mp4",
                 "duration": 60
@@ -304,7 +296,6 @@ class TestParameterValidationIntegration:
         """测试边界值验证"""
         # 测试 688002 正好2张图片（最小值）
         params = {
-            "template_id": "688002",
             "images": [
                 {"url": "https://example.com/i1.jpg", "duration": 5},
                 {"url": "https://example.com/i2.jpg", "duration": 5}
@@ -316,7 +307,6 @@ class TestParameterValidationIntegration:
 
         # 测试 688002 正好20张图片（最大值）
         params = {
-            "template_id": "688002",
             "images": [
                 {"url": f"https://example.com/i{i}.jpg", "duration": 5}
                 for i in range(20)
@@ -387,7 +377,6 @@ class TestPerformance:
         import time
 
         params = {
-            "template_id": "688001",
             "image1": "https://example.com/image1.jpg",
             "image2": "https://example.com/image2.png",
             "image3": "https://example.com/image3.jpg"
