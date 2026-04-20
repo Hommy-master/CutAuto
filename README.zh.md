@@ -45,8 +45,8 @@
 git clone <repository-url>
 cd cutauto
 
-# 使用 Docker Compose 启动
-docker-compose up -d
+# 使用 Docker Compose 启动（在仓库根目录执行）
+docker compose -f docker/docker-compose.yaml up -d
 ```
 
 ### 方式二：本地运行
@@ -114,8 +114,9 @@ cutauto/
 ├── main.py                  # 应用入口
 ├── config.py                # 配置文件
 ├── pyproject.toml           # 项目依赖
-├── Dockerfile               # Docker 镜像
-└── docker-compose.yaml      # Docker Compose 配置
+└── docker/
+    ├── Dockerfile           # Docker 镜像
+    └── docker-compose.yaml  # Docker Compose 配置
 ```
 
 ## 环境变量

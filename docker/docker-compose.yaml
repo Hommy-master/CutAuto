@@ -1,3 +1,6 @@
+# 从仓库根目录运行: docker compose -f docker/docker-compose.yaml up -d
+# 或在 docker 目录运行: docker compose up -d（需本目录下存在此文件）
+
 services:
   cutauto:
     image: gogoshine/cutauto:latest
@@ -6,7 +9,7 @@ services:
     ports:
       - "30000:30000"
     volumes:
-      - ./html/output:/app/output  # 挂载配置文件目录
+      - ../html/output:/app/output  # 相对于本 compose 文件所在目录（docker/）
       #- /etc/localtime:/etc/localtime:ro  # 挂载主机时区
       #- /etc/timezone:/etc/timezone:ro    # 挂载时区名称（可选）
     environment:
@@ -25,7 +28,7 @@ services:
     ports:
       - "30001:30000"
     volumes:
-      - ./html/output:/app/output  # 挂载配置文件目录
+      - ../html/output:/app/output
       #- /etc/localtime:/etc/localtime:ro  # 挂载主机时区
       #- /etc/timezone:/etc/timezone:ro    # 挂载时区名称（可选）
     environment:
@@ -47,7 +50,7 @@ services:
       - PROXY_PASS_URL_2=http://capcut-mate:30000/openapi/capcut-mate/
       - PROXY_LOCATION_2=/openapi/capcut-mate/
     volumes:
-      - ./html:/usr/share/nginx/html
+      - ../html:/usr/share/nginx/html
     restart: unless-stopped
     depends_on:
       - cutauto

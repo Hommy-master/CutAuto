@@ -45,8 +45,8 @@
 git clone <repository-url>
 cd cutauto
 
-# Start with Docker Compose
-docker-compose up -d
+# Start with Docker Compose (from repository root)
+docker compose -f docker/docker-compose.yaml up -d
 ```
 
 ### Option 2: Local Development
@@ -114,8 +114,9 @@ cutauto/
 ├── main.py                  # Application entry
 ├── config.py                # Configuration file
 ├── pyproject.toml           # Project dependencies
-├── Dockerfile               # Docker image
-└── docker-compose.yaml      # Docker Compose configuration
+└── docker/
+    ├── Dockerfile           # Docker image
+    └── docker-compose.yaml  # Docker Compose configuration
 ```
 
 ## Environment Variables
